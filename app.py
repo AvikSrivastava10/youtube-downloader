@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, after_this_request
+from flask import Flask, render_template, request, send_file
 import yt_dlp
 import os
 import uuid
@@ -23,6 +23,7 @@ def download():
     url = request.form.get("url")
     file_type = request.form.get("type")
 
+    # URL Validation
     if not url:
         return "No URL provided"
 
@@ -34,19 +35,8 @@ def download():
 
     try:
 
-        # MP4
+        # MP4 Download
         if file_type == "mp4":
-
-            ydl_opts = {
-                'format': 'bestvideo+bestaudio/best',
-                'outtmpl': f'{output_path}.%(ext)s',
-                'restrictfilenames': True,
-                'merge_output_format': 'mp4',
-                'quiet': True
-            }
-
-        # MP3
-        else:
 
             ydl_opts = {
     'format': 'bestvideo+bestaudio/best',
@@ -68,37 +58,55 @@ def download():
     'sleep_interval_requests': 1,
 }
 
+        # MP3 Download
+        else:
+
+            ydl_opts = {
+    'format': 'bestaudio/best',
+    'outtmpl': f'{output_path}.%(ext)s',
+    'restrictfilenames': True,
+    'quiet': True,
+
+    'http_headers': {
+        'User-Agent': 'Mozilla/5.0'
+    },
+
+    'extractor_args': {
+        'youtube': {
+            'player_client': ['android']
+        }
+    },
+
+    'sleep_interval_requests': 1,
+
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+}
+
+        print(f"Downloading: {url}")
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
-        downloaded_file = None
+        files = os.listdir(DOWNLOAD_FOLDER)
 
-        for file in os.listdir(DOWNLOAD_FOLDER):
+        for file in files:
 
             if unique_id in file:
-                downloaded_file = os.path.join(DOWNLOAD_FOLDER, file)
-                break
 
-        if not downloaded_file:
-            return "Download failed"
+                file_path = os.path.join(DOWNLOAD_FOLDER, file)
 
-        # Auto delete after response
-        @after_this_request
-        def remove_file(response):
+                print(f"Sending File: {file_path}")
 
-            try:
-                os.remove(downloaded_file)
-                print(f"Deleted: {downloaded_file}")
+                return send_file(
+                    file_path,
+                    as_attachment=True
+                )
 
-            except Exception as e:
-                print("Delete Error:", e)
-
-            return response
-
-        return send_file(
-            downloaded_file,
-            as_attachment=True
-        )
+        return "Download failed"
 
     except Exception as e:
         print("Error:", e)
@@ -106,10 +114,9 @@ def download():
 
 
 if __name__ == "__main__":
-
-    port = int(os.environ.get("PORT", 5000))
-
     app.run(
         host="0.0.0.0",
-        port=port
+        port=5000,
+        debug=True,
+        use_reloader=False
     )
