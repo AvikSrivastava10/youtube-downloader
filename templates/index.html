@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Downloader</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>YouTube Downloader</h1>
+
+    <form action="/download" method="POST">
+        <input type="text" name="url" placeholder="Paste YouTube URL" required>
+
+        <div class="buttons">
+            <button type="submit" name="type" value="mp4">
+                Download MP4
+            </button>
+
+            <button type="submit" name="type" value="mp3">
+                Download MP3
+            </button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0f172a;
+    font-family:Arial, sans-serif;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:420px;
+    background:#1e293b;
+    padding:32px 24px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1{
+    color:white;
+    margin-bottom:24px;
+    font-size:28px;
+    font-weight:700;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    margin-bottom:20px;
+    font-size:16px;
+    outline:none;
+}
+
+input::placeholder{
+    color:#64748b;
+}
+
+.buttons{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    transition:0.2s ease;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+button[value="mp4"]{
+    background:#3b82f6;
+    color:white;
+}
+
+button[value="mp3"]{
+    background:#10b981;
+    color:white;
+}
+
+/* Desktop Enhancement */
+
+@media (min-width:768px){
+
+    .container{
+        max-width:600px;
+        padding:40px;
+    }
+
+    .buttons{
+        flex-direction:row;
+    }
+
+}
