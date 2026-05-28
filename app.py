@@ -49,17 +49,24 @@ def download():
         else:
 
             ydl_opts = {
-                'format': 'bestaudio/best',
-                'outtmpl': f'{output_path}.%(ext)s',
-                'restrictfilenames': True,
-                'quiet': True,
+    'format': 'bestvideo+bestaudio/best',
+    'outtmpl': f'{output_path}.%(ext)s',
+    'restrictfilenames': True,
+    'merge_output_format': 'mp4',
+    'quiet': True,
 
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-            }
+    'http_headers': {
+        'User-Agent': 'Mozilla/5.0'
+    },
+
+    'extractor_args': {
+        'youtube': {
+            'player_client': ['android']
+        }
+    },
+
+    'sleep_interval_requests': 1,
+}
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
