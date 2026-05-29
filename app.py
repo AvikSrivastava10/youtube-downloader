@@ -44,6 +44,7 @@ def download():
     'restrictfilenames': True,
     'merge_output_format': 'mp4',
     'quiet': True,
+    'cookiefile': 'cookies.txt',
 
     'http_headers': {
         'User-Agent': 'Mozilla/5.0'
@@ -66,6 +67,7 @@ def download():
     'outtmpl': f'{output_path}.%(ext)s',
     'restrictfilenames': True,
     'quiet': True,
+    'cookiefile': 'cookies.txt',
 
     'http_headers': {
         'User-Agent': 'Mozilla/5.0'
